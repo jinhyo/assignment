@@ -27,7 +27,7 @@ export class Memo extends Model<Memo> {
   secret: boolean;
 
   @ForeignKey(() => User)
-  @Column
+  @Column({ allowNull: false })
   userId: number;
 
   @BelongsTo(() => User)
