@@ -1,6 +1,7 @@
 ## 실행 순서
 
 - .env.test 작성
+- .env.test의 DB_NAME으로 DB생성
 - npm run start:test
 
 ## REST API
