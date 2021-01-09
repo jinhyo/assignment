@@ -1,4 +1,5 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 
 import { StandardOutputDTO } from 'src/common/dtos/standard-output.dto';
 import { AuthService } from './auth.service';
@@ -15,7 +16,10 @@ export class AuthController {
   }
 
   @Post('/login')
-  login(@Body() userInfoDTO: UserInfoDTO): Promise<LoginOutputDTO> {
-    return this.authService.login(userInfoDTO);
+  login(
+    @Res({ passthrough: true }) res: Response,
+    @Body() userInfoDTO: UserInfoDTO,
+  ): Promise<LoginOutputDTO> {
+    return this.authService.login(res, userInfoDTO);
   }
 }

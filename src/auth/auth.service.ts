@@ -8,6 +8,7 @@ import { LoginOutputDTO } from './dtos/login-output.dto';
 import { USER_REPOSITORY } from '../common/constants';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -44,7 +45,10 @@ export class AuthService {
     }
   }
 
-  async login({ nickname, password }: UserInfoDTO): Promise<LoginOutputDTO> {
+  async login(
+    res: Response,
+    { nickname, password }: UserInfoDTO,
+  ): Promise<LoginOutputDTO> {
     try {
       nickname = nickname.trim();
       password = password.trim();
@@ -68,8 +72,7 @@ export class AuthService {
 
       const payload: JwtPayload = { id: user.id };
       const token = this.jwtService.sign(payload);
-
-      console.log('token', token);
+      res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
 
       return { success: true, token };
     } catch (error) {

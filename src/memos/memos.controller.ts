@@ -1,5 +1,6 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { Request } from 'express';
 
 import { User } from 'src/auth/entities/user.entity';
 import { LoginUser } from 'src/auth/login-user.decorator';
@@ -14,7 +15,12 @@ export class MemosController {
   constructor(private readonly memoService: MemosService) {}
 
   @Get('/')
-  getMemos(@LoginUser('id') id: number): Promise<MemoOutputDTO> {
+  getMemos(
+    @Req() req: Request,
+    @LoginUser('id') id: number,
+  ): Promise<MemoOutputDTO> {
+    console.log('req.cookies~~', req.cookies);
+    console.log('req.signedCookies', req.signedCookies);
     return this.memoService.getMemos(id);
   }
 
